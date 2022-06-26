@@ -553,7 +553,7 @@ footer {
     animation: animloader 1.5s ease-in-out infinite;
 }
 
-#map {
+iframe {
     width: 80vw;
     height: 80vw;
     border: 0;
@@ -705,7 +705,7 @@ footer {
         font-size: 19px;
     }
 
-    #map {
+    iframe {
         width: 504px;
         height: 504px;
         border-radius: 19px;
