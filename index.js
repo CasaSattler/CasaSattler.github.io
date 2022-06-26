@@ -178,6 +178,8 @@ $(document).ready(function () {
     document.querySelectorAll("img").forEach((element) => io.observe(element));
 
     $(window).on("load", function () {
+        window.initMap = initMap;
+        
         $('.text_center').first().animate({ 'opacity': 0 }, 1000);
 
         setTimeout(() => {
@@ -503,5 +505,3 @@ function initMap() {
         icon: 'assets/pin.png'
     });
 }
-
-window.initMap = initMap;
