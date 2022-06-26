@@ -11,36 +11,44 @@
 @font-face {
     font-family: "Areminiscent Smile";
     src: url("assets/areminiscentsmile-Regular.ttf");
+    font-display: swap;
 }
 
 @font-face {
     font-family: "Creato Display Light";
     src: url("assets/CreatoDisplay-Light.otf");
+    font-display: swap;
 }
 
 @font-face {
     font-family: "Creato Display Regular";
     src: url("assets/CreatoDisplay-Regular.otf");
+    font-display: swap;
 }
 
 @font-face {
     font-family: "Creato Display Medium";
     src: url("assets/CreatoDisplay-Medium.otf");
+    font-display: swap;
 }
 
+html,
 body {
     margin: 0;
     padding: 0;
     width: 100%;
     overflow-x: hidden !important;
     overflow-y: hidden;
+    background-color: transparent;
 }
 
 .backdrop {
     position: fixed;
     width: 100vw;
-    height: 300px;
+    height: 400px;
     pointer-events: none;
+    overflow: hidden;
+    z-index: -1;
 }
 
 .backdrop>img {
@@ -57,6 +65,7 @@ body {
     justify-content: center;
     height: 300px;
     width: 100%;
+    z-index: 0;
 }
 
 .socials {
@@ -64,6 +73,7 @@ body {
     display: inline;
     left: 10px;
     top: 10px;
+    z-index: 1;
 }
 
 .socials img {
@@ -86,6 +96,7 @@ a {
     text-decoration: none;
     font-family: Creato Display Regular;
     color: var(--TEXT_COLOR);
+    z-index: 1;
 }
 
 .text_center {
@@ -93,6 +104,7 @@ a {
     align-self: center;
     display: block;
     font-family: Areminiscent Smile;
+    z-index: 2;
 }
 
 .text_center div {
@@ -100,21 +112,21 @@ a {
     margin-bottom: 10px;
 }
 
-#logo {
+.logo {
     position: relative;
     width: 150px;
     left: 50%;
     margin-left: -75px;
 }
 
-#name {
+.name {
     position: relative;
     margin: 0;
     font-size: 40px;
     color: var(--TEXT_COLOR);
 }
 
-#menu {
+.menu {
     position: relative;
     margin: 0;
     text-align: center;
@@ -140,6 +152,7 @@ a {
     mask-size: var(--MASK_SIZE_CONTENT), var(--MASK_SIZE_SCROLLBAR);
     mask-position: 0 0, 100% 0;
     mask-repeat: no-repeat, no-repeat;
+    z-index: 3;
 }
 
 .carousel {
@@ -153,6 +166,7 @@ a {
     max-height: 750px;
     left: 50%;
     transform: translateX(-50%);
+    z-index: 4;
 }
 
 .button {
@@ -166,6 +180,7 @@ a {
     user-select: none;
     font-family: Creato Display Regular;
     position: absolute;
+    z-index: 6;
 }
 
 .pre {
@@ -189,6 +204,7 @@ a {
     transform: translateX(-50%);
     display: inline-flex;
     position: relative;
+    z-index: 5;
 }
 
 .card-carousel .my-card {
@@ -201,7 +217,7 @@ a {
     transform: scale(0.6);
     user-select: none;
     pointer-events: none;
-    transition: 1s;
+    transition: 0.5s;
 }
 
 .card-carousel .my-card.active {
@@ -223,6 +239,7 @@ a {
     margin: 0 10vw 0 10vw;
     position: relative;
     pointer-events: none;
+    z-index: 7;
 }
 
 #text1,
@@ -265,12 +282,13 @@ a {
     overflow: hidden;
     align-self: center;
     margin-bottom: 10vw;
+    z-index: 8;
 }
 
 .container_items {
-    position: absolute;
+    position: relative;
     pointer-events: none;
-    display: block;
+    display: none;
     user-select: none;
     -moz-user-select: none;
     -webkit-user-drag: none;
@@ -279,10 +297,22 @@ a {
     opacity: 0;
 }
 
+.container_items:nth-child(0) {
+    z-index: 9;
+}
+
+.container_items:nth-child(1) {
+    z-index: 10;
+}
+
+.container_items:nth-child(2) {
+    z-index: 11;
+}
+
 .container_items.active {
-    position: relative;
     pointer-events: all;
     opacity: 1;
+    display: block;
 }
 
 .collapsible {
@@ -304,11 +334,11 @@ a {
 
 .content {
     position: relative;
-    display: block;
+    max-height: 0;
     overflow: hidden;
-    height: 0;
     left: 0;
     right: 0;
+    transition: max-height 0.5s ease-in-out;
 }
 
 .item {
@@ -419,6 +449,7 @@ a {
     opacity: 0;
     pointer-events: none;
     transition: 1s;
+    z-index: 20;
 }
 
 .scroll_to_top.active {
@@ -440,6 +471,7 @@ a {
 footer {
     display: flex;
     justify-content: center;
+    z-index: 14;
 }
 
 .footer {
@@ -485,10 +517,8 @@ footer {
 }
 
 .loader {
-    height: 100vh;
-    top: 0;
-    left: 0;
-    right: 0;
+    height: 100%;
+    width: 100%;
     display: inline-flex;
     position: fixed;
     opacity: 1;
@@ -499,6 +529,7 @@ footer {
     z-index: 10000;
     align-content: center;
     justify-content: center;
+    z-index: 21;
 }
 
 .loader_anim {
@@ -522,6 +553,14 @@ footer {
     animation: animloader 1.5s ease-in-out infinite;
 }
 
+#map {
+    width: 80vw;
+    height: 80vw;
+    border: 0;
+    border-radius: 3vw;
+    margin-bottom: 1.5vw;
+}
+
 @keyframes animloader {
     0% {
         left: 0;
@@ -531,6 +570,12 @@ footer {
     100% {
         left: 100%;
         transform: translateX(0%);
+    }
+}
+
+@-moz-document url-prefix() {
+    img:-moz-loading {
+        visibility: hidden;
     }
 }
 
@@ -658,5 +703,12 @@ footer {
 
     .legal {
         font-size: 19px;
+    }
+
+    #map {
+        width: 504px;
+        height: 504px;
+        border-radius: 19px;
+        margin-bottom: 9px;
     }
 }

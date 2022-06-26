@@ -34,7 +34,11 @@ $('.pre').click(function () {
         $active_container.animate({ opacity: 0 }, 500);
 
         setTimeout(() => {
-            $prev_container.animate({ opacity: 1 }, 500); -
+            $('.content').each(function () {
+                if($(this).height() > 0)
+                    $(this).height(0);
+            })
+            $prev_container.animate({ opacity: 1 }, 500);
             $next_container.removeClass('next');
             $next_container.addClass('prev');
             $active_container.removeClass('active');
@@ -42,10 +46,6 @@ $('.pre').click(function () {
             $prev_container.removeClass('prev');
             $prev_container.addClass('active');
         }, 500);
-
-        $(".content").each(function () {
-            $(this).animate({ height: 0 }, 500);
-        })
 
         if (active == 0)
             active = 2;
@@ -82,18 +82,18 @@ $('.urm').click(function () {
         $active_container.animate({ opacity: 0 }, 500);
 
         setTimeout(() => {
-            $next_container.animate({ opacity: 1 }, 500); -
-                $prev_container.removeClass('prev');
+            $('.content').each(function () {
+                if($(this).height() > 0)
+                    $(this).height(0);
+            })
+            $next_container.animate({ opacity: 1 }, 500);
+            $prev_container.removeClass('prev');
             $prev_container.addClass('next');
             $next_container.removeClass('next');
             $next_container.addClass('active');
             $active_container.removeClass('active');
             $active_container.addClass('prev');
         }, 500);
-
-        $(".content").each(function () {
-            $(this).animate({ height: 0 }, 500);
-        })
 
         if (active == 2)
             active = 0;
@@ -123,10 +123,10 @@ function doMorph() {
 }
 
 function setMorph(fraction) {
-    elts.text2.style.opacity = `${(fraction - 0.5) * 200}%`;
+    elts.text2.style.opacity = `${(fraction - 0.2) * 500}%`;
 
     fraction = 1 - fraction;
-    elts.text1.style.opacity = `${(fraction - 0.5) * 200}%`;
+    elts.text1.style.opacity = `${(fraction - 0.8) * 500}%`;
 
     elts.text1.textContent = texts[init];
     elts.text2.textContent = texts[next];
@@ -161,19 +161,29 @@ function animate() {
         finish();
 }
 
-function autoHeightAnimate(element, time) {
-    var autoHeight = element.css('height', 'fit-content').height();
-    element.height(0);
-    element.stop().animate({ height: autoHeight }, time);
-}
-
 $(document).ready(function () {
+    const io = new IntersectionObserver((entries) =>
+        entries.forEach((entry) => {
+            if (entry.target.hasAttribute("data-src")) {
+                if (entry.isIntersecting) {
+                    const image = entry.target;
+                    image.src = image.dataset.src;
+                    io.unobserve(image);
+                }
+            } else
+                io.unobserve(entry.target);
+        })
+    );
+
+    document.querySelectorAll("img").forEach((element) => io.observe(element));
+
     $(window).on("load", function () {
         $('.text_center').first().animate({ 'opacity': 0 }, 1000);
 
         setTimeout(() => {
             $('.loader').css({ 'opacity': 0, 'pointer-events': 'none' });
             $('body').css({ 'overflow-y': 'visible' });
+            $('html').css({ 'overflow-y': 'visible' });
         }, 1000);
     });
 
@@ -191,16 +201,12 @@ $(document).ready(function () {
             var content = $(this).next();
 
             if (content.height() != 0)
-                content.animate({ height: 0 }, 500);
+                content.css({ "max-height": 0 });
             else {
-                $(".content").each(function () {
-                    $(this).animate({ height: 0 }, 500);
-                })
-
                 if (content.height() == 0)
-                    autoHeightAnimate(content, 500);
+                    content.css({ "max-height": content.prop("scrollHeight") });
                 else
-                    content.animate({ height: 0 }, 500);
+                    content.css({ "max-height": 0 });
             }
         })
     });
@@ -214,3 +220,288 @@ function scrollToTop() {
     if (!isScrolling())
         window.scrollTo({ top: 0, behavior: "smooth" });
 }
+
+function initMap() {
+    var map = new google.maps.Map(document.getElementById("map"), {
+        center: { lat: 44.8592512, lng: 24.8742251 },
+        zoom: 15,
+        zoomControl: false,
+        mapTypeControl: false,
+        scaleControl: false,
+        streetViewControl: false,
+        rotateControl: false,
+        fullscreenControl: false,
+        styles: [
+            {
+                "featureType": "all",
+                "elementType": "labels",
+                "stylers": [
+                    {
+                        "visibility": "on"
+                    }
+                ]
+            },
+            {
+                "featureType": "all",
+                "elementType": "labels.text.fill",
+                "stylers": [
+                    {
+                        "saturation": 36
+                    },
+                    {
+                        "color": "#000000"
+                    },
+                    {
+                        "lightness": 40
+                    }
+                ]
+            },
+            {
+                "featureType": "all",
+                "elementType": "labels.text.stroke",
+                "stylers": [
+                    {
+                        "visibility": "on"
+                    },
+                    {
+                        "color": "#000000"
+                    },
+                    {
+                        "lightness": 16
+                    }
+                ]
+            },
+            {
+                "featureType": "all",
+                "elementType": "labels.icon",
+                "stylers": [
+                    {
+                        "visibility": "off"
+                    }
+                ]
+            },
+            {
+                "featureType": "administrative",
+                "elementType": "geometry.fill",
+                "stylers": [
+                    {
+                        "color": "#000000"
+                    },
+                    {
+                        "lightness": 20
+                    }
+                ]
+            },
+            {
+                "featureType": "administrative",
+                "elementType": "geometry.stroke",
+                "stylers": [
+                    {
+                        "color": "#000000"
+                    },
+                    {
+                        "lightness": 17
+                    },
+                    {
+                        "weight": 1.2
+                    }
+                ]
+            },
+            {
+                "featureType": "administrative.country",
+                "elementType": "labels.text.fill",
+                "stylers": [
+                    {
+                        "color": "#e5c163"
+                    }
+                ]
+            },
+            {
+                "featureType": "administrative.locality",
+                "elementType": "labels.text.fill",
+                "stylers": [
+                    {
+                        "color": "#c4c4c4"
+                    }
+                ]
+            },
+            {
+                "featureType": "administrative.neighborhood",
+                "elementType": "labels.text.fill",
+                "stylers": [
+                    {
+                        "color": "#e5c163"
+                    }
+                ]
+            },
+            {
+                "featureType": "landscape",
+                "elementType": "geometry",
+                "stylers": [
+                    {
+                        "color": "#000000"
+                    },
+                    {
+                        "lightness": 20
+                    }
+                ]
+            },
+            {
+                "featureType": "poi",
+                "elementType": "geometry",
+                "stylers": [
+                    {
+                        "color": "#000000"
+                    },
+                    {
+                        "lightness": 21
+                    },
+                    {
+                        "visibility": "on"
+                    }
+                ]
+            },
+            {
+                "featureType": "poi.business",
+                "elementType": "geometry",
+                "stylers": [
+                    {
+                        "visibility": "on"
+                    }
+                ]
+            },
+            {
+                "featureType": "road.highway",
+                "elementType": "geometry.fill",
+                "stylers": [
+                    {
+                        "color": "#e5c163"
+                    },
+                    {
+                        "lightness": "0"
+                    }
+                ]
+            },
+            {
+                "featureType": "road.highway",
+                "elementType": "geometry.stroke",
+                "stylers": [
+                    {
+                        "visibility": "off"
+                    }
+                ]
+            },
+            {
+                "featureType": "road.highway",
+                "elementType": "labels.text.fill",
+                "stylers": [
+                    {
+                        "color": "#ffffff"
+                    }
+                ]
+            },
+            {
+                "featureType": "road.highway",
+                "elementType": "labels.text.stroke",
+                "stylers": [
+                    {
+                        "color": "#e5c163"
+                    }
+                ]
+            },
+            {
+                "featureType": "road.arterial",
+                "elementType": "geometry",
+                "stylers": [
+                    {
+                        "color": "#000000"
+                    },
+                    {
+                        "lightness": 18
+                    }
+                ]
+            },
+            {
+                "featureType": "road.arterial",
+                "elementType": "geometry.fill",
+                "stylers": [
+                    {
+                        "color": "#575757"
+                    }
+                ]
+            },
+            {
+                "featureType": "road.arterial",
+                "elementType": "labels.text.fill",
+                "stylers": [
+                    {
+                        "color": "#ffffff"
+                    }
+                ]
+            },
+            {
+                "featureType": "road.arterial",
+                "elementType": "labels.text.stroke",
+                "stylers": [
+                    {
+                        "color": "#2c2c2c"
+                    }
+                ]
+            },
+            {
+                "featureType": "road.local",
+                "elementType": "geometry",
+                "stylers": [
+                    {
+                        "color": "#000000"
+                    },
+                    {
+                        "lightness": 16
+                    }
+                ]
+            },
+            {
+                "featureType": "road.local",
+                "elementType": "labels.text.fill",
+                "stylers": [
+                    {
+                        "color": "#999999"
+                    }
+                ]
+            },
+            {
+                "featureType": "transit",
+                "elementType": "geometry",
+                "stylers": [
+                    {
+                        "color": "#000000"
+                    },
+                    {
+                        "lightness": 19
+                    }
+                ]
+            },
+            {
+                "featureType": "water",
+                "elementType": "geometry",
+                "stylers": [
+                    {
+                        "color": "#000000"
+                    },
+                    {
+                        "lightness": 17
+                    }
+                ]
+            }
+        ],
+    });
+
+    new google.maps.Marker({
+        position: { lat: 44.8592512, lng: 24.8742251 },
+        map,
+        title: "Casa Sattler",
+        icon: 'assets/pin.png'
+    });
+}
+
+window.initMap = initMap;
