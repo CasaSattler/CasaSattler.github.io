@@ -3,11 +3,27 @@ const elts = {
     text2: document.getElementById("text2")
 };
 
-const texts = [
-    "Meniu Bucatarie",
-    "Meniu Bar",
-    "Cartea Vinurilor",
-];
+let texts;
+var url = window.location.pathname;
+url = url.substring(url.lastIndexOf("/") + 1);
+
+if (url.startsWith("en")) {
+    texts = [
+        "Kitchen Menu",
+        "Bar Menu",
+        "Wine Book",
+        "Whiskey Menu",
+        "Bookings",
+    ];
+} else {
+    texts = [
+        "Meniu Bucatarie",
+        "Meniu Bar",
+        "Cartea Vinurilor",
+        "Meniu Whiskey",
+        "Rezervari",
+    ];
+}
 
 let time = new Date(), morph = 0, cooldown = 0, init = 0, next = 1, active = 0, isAnimating = false;
 
@@ -18,40 +34,89 @@ $('.pre').click(function () {
         $active_card = $('.my-card.active');
         $next_card = $('.my-card.next');
         $prev_card = $('.my-card.prev');
+        $inactive_prev_card = $('.my-card.inactive_prev');
+        $inactive_next_card = $('.my-card.inactive_next');
 
         $active_container = $('.container_items.active');
         $next_container = $('.container_items.next');
         $prev_container = $('.container_items.prev');
+        $inactive_next_container = $('.container_items.inactive_next');
+        $inactive_prev_container = $('.container_items.inactive_prev');
 
         $prev_card.removeClass('prev');
         $prev_card.addClass('active');
         $next_card.removeClass('next');
-        $next_card.addClass('prev');
+        $next_card.addClass('inactive_next');
         $active_card.removeClass('active');
         $active_card.addClass('next');
+        $inactive_next_card.removeClass('inactive_next');
+        $inactive_next_card.addClass('inactive_prev');
+        $inactive_prev_card.removeClass('inactive_prev');
+        $inactive_prev_card.addClass('prev');
 
         $next_container.animate({ opacity: 0 }, 500);
         $active_container.animate({ opacity: 0 }, 500);
 
         setTimeout(() => {
             $('.content').each(function () {
-                if($(this).height() > 0)
+                if ($(this).height() > 0)
                     $(this).height(0);
             })
             $prev_container.animate({ opacity: 1 }, 500);
-            $next_container.removeClass('next');
-            $next_container.addClass('prev');
-            $active_container.removeClass('active');
-            $active_container.addClass('next');
             $prev_container.removeClass('prev');
             $prev_container.addClass('active');
+            $next_container.removeClass('next');
+            $next_container.addClass('inactive_next');
+            $active_container.removeClass('active');
+            $active_container.addClass('next');
+            $inactive_next_container.removeClass('inactive_next');
+            $inactive_next_container.addClass('inactive_prev');
+            $inactive_prev_container.removeClass('inactive_prev');
+            $inactive_prev_container.addClass('prev');
         }, 500);
 
         if (active == 0)
-            active = 2;
+            active = 4;
         else
             active--;
         next = active;
+
+        if (url.startsWith("en")) {
+            if (active == 0) {
+                $('.pre').text("← BOOKINGS");
+                $('.urm').text("BAR →");
+            } else if (active == 1) {
+                $('.pre').text("← KITCHEN");
+                $('.urm').text("WINES →");
+            } else if (active == 2) {
+                $('.pre').text("← BAR");
+                $('.urm').text("WHISKEY →");
+            } else if (active == 3) {
+                $('.pre').text("← WINES");
+                $('.urm').text("BOOKINGS →");
+            } else {
+                $('.pre').text("← WHISKEY");
+                $('.urm').text("KITCHEN →");
+            }
+        } else {
+            if (active == 0) {
+                $('.pre').text("← REZERVARI");
+                $('.urm').text("BAR →");
+            } else if (active == 1) {
+                $('.pre').text("← BUCATARIE");
+                $('.urm').text("VINURI →");
+            } else if (active == 2) {
+                $('.pre').text("← BAR");
+                $('.urm').text("WHISKEY →");
+            } else if (active == 3) {
+                $('.pre').text("← VINURI");
+                $('.urm').text("REZERVARI →");
+            } else {
+                $('.pre').text("← WHISKEY");
+                $('.urm').text("BUCATARIE →");
+            }
+        }
+
         cooldown = 0;
         time = new Date();
 
@@ -66,40 +131,89 @@ $('.urm').click(function () {
         $active_card = $('.my-card.active');
         $next_card = $('.my-card.next');
         $prev_card = $('.my-card.prev');
+        $inactive_prev_card = $('.my-card.inactive_prev');
+        $inactive_next_card = $('.my-card.inactive_next');
 
         $active_container = $('.container_items.active');
         $next_container = $('.container_items.next');
         $prev_container = $('.container_items.prev');
+        $inactive_next_container = $('.container_items.inactive_next');
+        $inactive_prev_container = $('.container_items.inactive_prev');
 
         $prev_card.removeClass('prev');
-        $prev_card.addClass('next');
+        $prev_card.addClass('inactive_prev');
         $next_card.removeClass('next');
         $next_card.addClass('active');
         $active_card.removeClass('active');
         $active_card.addClass('prev');
+        $inactive_next_card.removeClass('inactive_next');
+        $inactive_next_card.addClass('next');
+        $inactive_prev_card.removeClass('inactive_prev');
+        $inactive_prev_card.addClass('inactive_next');
 
         $prev_container.animate({ opacity: 0 }, 500);
         $active_container.animate({ opacity: 0 }, 500);
 
         setTimeout(() => {
             $('.content').each(function () {
-                if($(this).height() > 0)
+                if ($(this).height() > 0)
                     $(this).height(0);
             })
             $next_container.animate({ opacity: 1 }, 500);
             $prev_container.removeClass('prev');
-            $prev_container.addClass('next');
+            $prev_container.addClass('inactive_prev');
             $next_container.removeClass('next');
             $next_container.addClass('active');
             $active_container.removeClass('active');
             $active_container.addClass('prev');
+            $inactive_next_container.removeClass('inactive_next');
+            $inactive_next_container.addClass('next');
+            $inactive_prev_container.removeClass('inactive_prev');
+            $inactive_prev_container.addClass('inactive_next');
         }, 500);
 
-        if (active == 2)
+        if (active == 4)
             active = 0;
         else
             active++;
         next = active;
+
+        if (url.startsWith("en")) {
+            if (active == 0) {
+                $('.pre').text("← BOOKINGS");
+                $('.urm').text("BAR →");
+            } else if (active == 1) {
+                $('.pre').text("← KITCHEN");
+                $('.urm').text("WINES →");
+            } else if (active == 2) {
+                $('.pre').text("← BAR");
+                $('.urm').text("WHISKEY →");
+            } else if (active == 3) {
+                $('.pre').text("← WINES");
+                $('.urm').text("BOOKINGS →");
+            } else {
+                $('.pre').text("← WHISKEY");
+                $('.urm').text("KITCHEN →");
+            }
+        } else {
+            if (active == 0) {
+                $('.pre').text("← REZERVARI");
+                $('.urm').text("BAR →");
+            } else if (active == 1) {
+                $('.pre').text("← BUCATARIE");
+                $('.urm').text("VINURI →");
+            } else if (active == 2) {
+                $('.pre').text("← BAR");
+                $('.urm').text("WHISKEY →");
+            } else if (active == 3) {
+                $('.pre').text("← VINURI");
+                $('.urm').text("REZERVARI →");
+            } else {
+                $('.pre').text("← WHISKEY");
+                $('.urm').text("BUCATARIE →");
+            }
+        }
+
         cooldown = 0;
         time = new Date();
 
@@ -177,7 +291,7 @@ $(document).ready(function () {
 
     document.querySelectorAll("img").forEach((element) => io.observe(element));
 
-    $(window).on("load", function () {     
+    $(window).on("load", function () {
         $('.text_center').first().animate({ 'opacity': 0 }, 1000);
 
         setTimeout(() => {
